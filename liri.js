@@ -1,3 +1,5 @@
+"use strict"
+
 // Grabs the twitter variables
 var trKeys = require("./keys.js");
 
@@ -8,6 +10,25 @@ var spotify = require("spotify");
 // Grabs twitter information
 var twitter = require("twitter");
 
+//Switch to determine action to take
+function doAction(action){
+	switch(action) {
+		case 'my-tweets':
+			twitter();
+			break;
+		case 'spotify-this-song':
+			spotify();
+			break;
+		case 'movie-this':
+			movie();
+			break;
+		case 'do-what-it-says':
+			doIt();
+			break;
+		default:
+			console.log("Enter 'my-tweets', 'spotify-this-song', 'movie-this', or 'do-what-it-says'");
+	}
+}
 
 
 //MOVIE FUNCTION
@@ -94,6 +115,90 @@ function tweetRequest(){
 
         }
     });
+}//end of twitter function
+
+
+
+function spotifyRequest(){
+    // Grab or assemble the spotify name  and store it in a variable called "spotifyName"
+// ...
+var spotifyName="";
+//or grabs song The Sign if nothing is put in
+if(process.argv.length < 4){
+    spotifyName = "The+Sign";
+}
+else{
+    spotifyName = process.argv[3];
+
+//this pulls songs that are more then one word
+    for(var i=4; i < process.argv.length; i++)
+{
+    spotifyName= spotifyName + "+" + process.argv[i];//contactonate all of the information spaces
+}
+}
+//Get spotify node package
+	var spotify = require('spotify');
+	 
+	spotify.search({ type: 'track', query: spotifyName}, function(error, data) {
+	    //If error occurs
+	    if (error) {
+	        console.log('Error occurred: ' + error);
+	        return;
+	    }
+	 	
+	 	//If no error
+		if (!error) {
+
+			//Artist name 
+			var artist = data.tracks.items[0].artists[0].name;
+
+			//Song name
+			var song = data.tracks.items[0].name;
+
+			//Spotify preview link
+			var link = data.tracks.items[0].external_urls.spotify;
+			
+			//Album name
+			var album = data.tracks.items[0].album.name;
+			
+			//Print song info
+			console.log(song + ", performed by " + artist + ", on the album " + album + ". Spotify: " + link);
+			
+			}
+			
+	});
+
+}//end of spotify function
+
+//Begining of request
+
+//do-what-it-says
+function doIt() {
+
+	//Get fs
+	var fs = require('fs');
+
+	//Stores the contents of the reading inside the var "data"
+	fs.readFile("random.txt", "utf8", function(error, data) {
+	var split = data.split(',');
+
+
+	//assign to user input
+	var doAction = [];
+    doAction[0] = node;
+	doAction[1] = liri.js;
+    doAction[3] = split[0];
+    doAction[4] = split[1];
+
+	doAction(action);
+
+	});
+
 }
 
-tweetRequest();
+//Start the process
+doAction(process.argv);
+
+
+
+
