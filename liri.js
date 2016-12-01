@@ -10,17 +10,29 @@ var spotify = require("spotify");
 // Grabs twitter information
 var twitter = require("twitter");
 
+function getAction(action){
+   if (action.length < 3){
+       return "junk";
+    }
+    return action[2];
+}
+
 //Switch to determine action to take
-function doAction(action){
-	switch(action) {
+function run(action){
+    
+{
+    var command = getAction(action);
+//Switch function to determine what action to take
+
+	switch(command) {
 		case 'my-tweets':
-			twitter();
+			tweetRequest();
 			break;
 		case 'spotify-this-song':
-			spotify();
+			spotifyRequest(action);
 			break;
 		case 'movie-this':
-			movie();
+			movieRequest(action);
 			break;
 		case 'do-what-it-says':
 			doIt();
@@ -30,6 +42,7 @@ function doAction(action){
 	}
 }
 
+}
 
 //MOVIE FUNCTION
 
@@ -179,25 +192,28 @@ function doIt() {
 	var fs = require('fs');
 
 	//Stores the contents of the reading inside the var "data"
-	fs.readFile("random.txt", "utf8", function(error, data) {
+	fs.readFile("random.txt", "utf8", allanaSwitch);
+    
+    function allanaSwitch(error, data) {
 	var split = data.split(',');
 
 
 	//assign to user input
 	var doAction = [];
-    doAction[0] = node;
-	doAction[1] = liri.js;
-    doAction[3] = split[0];
-    doAction[4] = split[1];
+    doAction[0] = "node";
+	doAction[1] = "liri.js";
+    doAction[2] = split[0];
+    doAction[3] = split[1];
 
-	doAction(action);
+	run(doAction);
 
-	});
+	}
 
 }
 
+
 //Start the process
-doAction(process.argv);
+run(process.argv);
 
 
 
